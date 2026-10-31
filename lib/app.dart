@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'home.dart';
+import 'package:nextask/pages/introScreen.dart';
+import 'package:nextask/theme/themeProvider.dart';
+import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -9,7 +10,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Home(),
+      debugShowCheckedModeBanner: false,
+      theme: context.watch<ThemeProvider>().getTheme(),
+      home: Introscreen(),
     );
   }
 }
