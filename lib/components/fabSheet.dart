@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:nextask/components/dataInput.dart';
 import 'package:nextask/database/dbHelper.dart';
+import 'package:provider/provider.dart';
+import '../taskProvider.dart';
 
 class Fabsheet extends StatefulWidget {
   const Fabsheet({super.key});
@@ -16,16 +16,18 @@ enum Priority { Low, Normal, High }
 class _FabsheetState extends State<Fabsheet> {
   final textController = TextEditingController();
   final descController = TextEditingController();
-  DateTime? selectedDate;
+  DateTime? selectedDate = DateTime.now();
+  bool isTaskEmpty = false;
 
-  Future<void> datepick() async {
+  Future<void> datepick(StateSetter sets) async {
     final take = await showDatePicker(
       context: context,
       firstDate: DateTime.now(),
       lastDate: DateTime(2050),
     );
+
     if (take != null) {
-      setState(() {
+      sets(() {
         selectedDate = take;
       });
     }
@@ -44,6 +46,14 @@ class _FabsheetState extends State<Fabsheet> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    textController.dispose();
+    descController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       backgroundColor: Colors.amber,
@@ -52,12 +62,11 @@ class _FabsheetState extends State<Fabsheet> {
         borderRadius: BorderRadiusGeometry.circular(50),
       ),
       onPressed: () {
-        showBottomSheet(
+        showModalBottomSheet(
           context: context,
-          sheetAnimationStyle: AnimationStyle(
-            duration: Duration(seconds: 1),
-            curve: TreeSliver.defaultAnimationCurve,
-          ),
+          isDismissible: true,
+          enableDrag: true,
+          isScrollControlled: true,
           builder: (BuildContext context) {
             return StatefulBuilder(
               builder: (context, sets) {
@@ -65,7 +74,7 @@ class _FabsheetState extends State<Fabsheet> {
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.onPrimary,
                     border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(35),
+                    borderRadius: BorderRadius.circular(25),
                   ),
                   height: 500,
                   width: double.infinity,
@@ -76,10 +85,25 @@ class _FabsheetState extends State<Fabsheet> {
                       mainAxisAlignment: .spaceEvenly,
                       children: [
                         test(inp: "Task Name"),
-                        DataInput(controller: textController),
+                        DataInput(
+                          controller: textController,
+                          htext: "Enter Task here.",
+                          cr: isTaskEmpty ? Colors.red : Colors.grey,
+                          br: BorderSide(
+                            color: isTaskEmpty ? Colors.red : Colors.grey,
+                            width: isTaskEmpty ? 3:2,
+                          ),
+                          onChanged: (value) {
+                            if (value.trim().isNotEmpty) {
+                              sets(() {
+                                isTaskEmpty = false;
+                              });
+                            }
+                          },
+                        ),
                         test(inp: "Description"),
 
-                        DataInput(controller: descController),
+                        DataInput(controller: descController,htext: "Enter Description here."),
                         test(inp: "Priority"),
                         SegmentedButton(
                           multiSelectionEnabled: false,
@@ -144,7 +168,7 @@ class _FabsheetState extends State<Fabsheet> {
                                 ? '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}'
                                 : 'No date selected',
                             suffixIcon: IconButton(
-                              onPressed: datepick,
+                              onPressed: () => datepick(sets),
                               icon: const Icon(Icons.calendar_month_rounded),
                             ),
                             enabledBorder: OutlineInputBorder(
@@ -169,23 +193,45 @@ class _FabsheetState extends State<Fabsheet> {
                               ),
                             ),
                             onPressed: () async {
+
+                              final taskName = textController.text.trim();
+
+                              if (taskName.isEmpty) {
+                                sets(() {
+                                  isTaskEmpty = true;
+                                });
+                                return;
+                              }
+
                               await DbHelper.getInstance().addTask(
-                                taskInput: textController.text,
-                                dateInput: selectedDate?.toIso8601String() ??
+                                taskInput: taskName,
+                                dateInput:
+                                    selectedDate?.toIso8601String() ??
                                     DateTime.now().toIso8601String(),
                                 priorityInput: priority(),
                                 statusInput: false,
                               );
 
-                              print('Task saved successfully');
-                             final ab= DbHelper.getInstance().fetchTask();
-                             print(ab);
+                              if (!mounted) return;
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text("Task Saved")),
+                              );
+
+                              textController.clear();
+                              descController.clear();
+                              selectedDate = DateTime.now();
+                              selectedPriority = Priority.Low;
+                              Navigator.pop(context);
+
+                              await context.read<TaskProvider>().loadData();
                             },
                             child: Text(
                               "Save",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: .bold,
+                                fontSize: 15,
                               ),
                             ),
                           ),

@@ -4,19 +4,35 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:nextask/theme/theme.dart';
-class ThemeProvider extends ChangeNotifier{
+import 'package:shared_preferences/shared_preferences.dart';
+
+class ThemeProvider extends ChangeNotifier {
   bool isdark = false;
 
-ThemeData _themeData = ThemeD().lightMode;
+  ThemeData _themeData = ThemeD().lightMode;
 
-ThemeData getTheme(){
-  return _themeData;
-}
+  ThemeData getTheme() {
+    return _themeData;
+  }
+  Future<void> loadTheme() async {
+    final prefs = await SharedPreferences.getInstance();
 
-void trigger (){
-isdark = !isdark;
-_themeData = isdark ? ThemeD().darkMode : ThemeD().lightMode;
-notifyListeners();
-}
+    isdark = prefs.getBool('isDark') ?? false;
 
+    _themeData = isdark ? ThemeD().darkMode : ThemeD().lightMode;
+
+    notifyListeners();
+  }
+
+  Future<void> saveTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDark', isdark);
+  }
+
+
+  void trigger() {
+    isdark = !isdark;
+    _themeData = isdark ? ThemeD().darkMode : ThemeD().lightMode;
+    notifyListeners();
+  }
 }

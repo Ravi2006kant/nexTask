@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -30,9 +31,9 @@ class DbHelper {
     final String mPath = join(app.path, DBNAME);
     return openDatabase(
       mPath,
-      version:1,
+      version: 1,
       onCreate: (db, version) async {
-      await  db.execute('''create table if not exists $TABLENAME (
+        await db.execute('''create table if not exists $TABLENAME (
   $ID INTEGER PRIMARY KEY AUTOINCREMENT,
  $TASK TEXT not null,
  $DATE TEXT ,
@@ -43,6 +44,7 @@ class DbHelper {
       },
     );
   }
+
   // $TIME REAL ,
   //adding task
   Future<void> addTask({
@@ -55,18 +57,36 @@ class DbHelper {
     await db.insert(TABLENAME, {
       TASK: taskInput,
       DATE: dateInput,
-      STATUS: statusInput ? 1:0,
-      PRIORITY:priorityInput
+      STATUS: statusInput ? 1 : 0,
+      PRIORITY: priorityInput,
     });
+  }
 
 
-    }
-    // Future<List<Map<String,dynamic>>> fetchTask() async{
-Future<void> fetchTask() async{
-final db = await initdb();
-final data = await db.query(TABLENAME);
-print(data);
-// return data;
 
+  Future<List<Map<String, dynamic>>> fetchTask() async {
+    // Future<void> fetchTask() async{
+    final db = await initdb();
+    final data = await db.query(TABLENAME, orderBy: "$ID DESC");
+    print(data);
+    return data;
+  }
+
+
+  // Future<int> updateTask() async {
+  //   // Future<void> fetchTask() async{
+  //   final db = await initdb();
+  //   final data = await db.update(TABLENAME, ID);
+  //   print(data);
+  //   return data;
+  // }
+  Future<void> deleteTask({required int id}) async {
+    final db = await initdb();
+    db.delete(TABLENAME, where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<void> deleteAllData() async {
+    final db = await initdb();
+    db.delete(TABLENAME);
   }
 }
