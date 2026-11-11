@@ -12,6 +12,7 @@ class DbHelper {
   static const String TABLENAME = 'todo';
   static const String ID = 'id';
   static const String TASK = 'task';
+  static const String DESC = 'desc';
   static const String DATE = 'date';
   static const String PRIORITY = 'priority';
   static const String TIME = 'time';
@@ -36,6 +37,7 @@ class DbHelper {
         await db.execute('''create table if not exists $TABLENAME (
   $ID INTEGER PRIMARY KEY AUTOINCREMENT,
  $TASK TEXT not null,
+  $DESC TEXT ,
  $DATE TEXT ,
  $PRIORITY INTEGER not null,
   $STATUS INTEGER NOT NULL DEFAULT 0
@@ -52,17 +54,17 @@ class DbHelper {
     required int priorityInput,
     required String dateInput,
     required bool statusInput,
+    required String descInput,
   }) async {
     final db = await initdb();
     await db.insert(TABLENAME, {
       TASK: taskInput,
       DATE: dateInput,
+      DESC: descInput,
       STATUS: statusInput ? 1 : 0,
       PRIORITY: priorityInput,
     });
   }
-
-
 
   Future<List<Map<String, dynamic>>> fetchTask() async {
     // Future<void> fetchTask() async{
@@ -72,14 +74,36 @@ class DbHelper {
     return data;
   }
 
+  Future<List<Map<String, dynamic>>> fetchTaskById({required int id}) async {
+    final db = await initdb();
+    final data = await db.query(TABLENAME, where: 'id = ?', whereArgs: [id]);
 
-  // Future<int> updateTask() async {
-  //   // Future<void> fetchTask() async{
-  //   final db = await initdb();
-  //   final data = await db.update(TABLENAME, ID);
-  //   print(data);
-  //   return data;
-  // }
+    return data;
+  }
+
+  Future<void> updateTask({
+    required id,
+    String? task,
+    String? des,
+    int? priority,
+    String? date,
+  }) async {
+    final db = await initdb();
+
+    await db.update(
+      TABLENAME,
+      {
+        TASK: task,
+        DESC: des,
+        PRIORITY: priority,
+        DATE: date,
+      },
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+
   Future<void> deleteTask({required int id}) async {
     final db = await initdb();
     db.delete(TABLENAME, where: 'id = ?', whereArgs: [id]);

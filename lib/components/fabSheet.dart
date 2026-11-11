@@ -34,6 +34,14 @@ class _FabsheetState extends State<Fabsheet> {
   }
 
   Priority selectedPriority = Priority.Low;
+  String descrip() {
+    if (descController.text.trim().isEmpty) {
+      return "No data";
+    } else {
+      return descController.text.trim();
+    }
+  }
+
 
   int priority() {
     if (selectedPriority == Priority.Low) {
@@ -62,7 +70,7 @@ class _FabsheetState extends State<Fabsheet> {
         borderRadius: BorderRadiusGeometry.circular(50),
       ),
       onPressed: () {
-        showModalBottomSheet(
+       showModalBottomSheet(
           context: context,
           isDismissible: true,
           enableDrag: true,
@@ -210,6 +218,7 @@ class _FabsheetState extends State<Fabsheet> {
                                     DateTime.now().toIso8601String(),
                                 priorityInput: priority(),
                                 statusInput: false,
+                                descInput:descrip()
                               );
 
                               if (!mounted) return;
