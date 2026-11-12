@@ -12,6 +12,7 @@ class HomeDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      width: 250,
       child: Column(
         children: [
           SizedBox(height: 75),

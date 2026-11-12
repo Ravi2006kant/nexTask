@@ -4,7 +4,7 @@ class ThemeD {
   ThemeData lightMode = ThemeData(
     brightness: .light,
     colorScheme: ColorScheme.light(
-      primary: Colors.amber,
+      primary: Colors.amber.shade300,
       inverseSurface: Colors.black,
       surface: Colors.white,
       inversePrimary: Colors.white,
@@ -15,8 +15,8 @@ class ThemeD {
     brightness: .dark,
     colorScheme: ColorScheme.dark(
       primary: Colors.grey.shade800,
-        inverseSurface: Colors.amber,
-        inversePrimary: Colors.amber,
+        inverseSurface: Colors.amber.shade300,
+        inversePrimary: Colors.amber.shade300,
       surface: Colors.grey.shade900,
       onPrimary: Colors.grey.shade800
     ),

@@ -64,7 +64,7 @@ class _FabsheetState extends State<Fabsheet> {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      backgroundColor: Colors.amber,
+      backgroundColor: Colors.amber.shade300,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusGeometry.circular(50),
@@ -84,7 +84,7 @@ class _FabsheetState extends State<Fabsheet> {
                     border: Border.all(color: Colors.black),
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  height: 500,
+                  height: 430,
                   width: double.infinity,
                   child: Padding(
                     padding: const EdgeInsets.all(20),
@@ -122,7 +122,7 @@ class _FabsheetState extends State<Fabsheet> {
                                   states,
                                 ) {
                                   if (states.contains(WidgetState.selected)) {
-                                    return Colors.amber;
+                                    return Colors.amber.shade300;
                                   }
                                   return Colors.transparent;
                                 }),
@@ -197,7 +197,7 @@ class _FabsheetState extends State<Fabsheet> {
                           child: ElevatedButton(
                             style: ButtonStyle(
                               backgroundColor: WidgetStatePropertyAll(
-                                Colors.amber,
+                                Colors.amber.shade300,
                               ),
                             ),
                             onPressed: () async {

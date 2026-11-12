@@ -28,6 +28,22 @@ class _IntroscreenState extends State<Introscreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Colors.yellow.shade600);
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: .center,
+
+        children: [
+          Center(child: Image.asset('assets/logo.png', width: 100, height: 100)),
+          Text(
+            "NexTask",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: .bold,
+              fontSize: 25,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
