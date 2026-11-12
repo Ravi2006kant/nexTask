@@ -82,12 +82,7 @@ class _HomeState extends State<Home> {
       drawer: HomeDrawer(),
 
       appBar: AppBar(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.only(
-            bottomLeft: .circular(25),
-            bottomRight: .circular(25),
-          ),
-        ),
+
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text("TO DO LIST", style: TextStyle(fontWeight: .bold)),
       ),
