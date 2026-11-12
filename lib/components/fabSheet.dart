@@ -84,7 +84,7 @@ class _FabsheetState extends State<Fabsheet> {
                     border: Border.all(color: Colors.black),
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  height: 430,
+                  height: 500,
                   width: double.infinity,
                   child: Padding(
                     padding: const EdgeInsets.all(20),
