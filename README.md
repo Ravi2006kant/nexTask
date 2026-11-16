@@ -23,9 +23,9 @@ The goal of this project was to build a practical application while strengthenin
 
 <!-- Add your application screenshots here -->
 
-| Home Screen | Task Management |
-|---|---|
-| Add Screenshot | Add Screenshot |
+| Home Screen | Add Task |
+|:---:|:---:|
+| <img src="https://github.com/user-attachments/assets/e1cae3c0-91fc-42a2-bcad-4d6232a9db62" width="250"> | <img src="https://github.com/user-attachments/assets/11e5a36e-09a3-4fd9-b674-bb30b2e7464f" width="250"> |
 
 ## 📥 Download & Installation
 
