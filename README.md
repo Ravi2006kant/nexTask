@@ -31,7 +31,7 @@ The goal of this project was to build a practical application while strengthenin
 
 ### Option 1: Download the Android App
 
-1. Visit the [Latest Release](YOUR_GITHUB_RELEASE_LINK).
+1. Visit the https://github.com/Ravi2006kant/nexTask/releases/tag/v1.0.0
 2. Download the APK file.
 3. Open the downloaded APK on your Android device.
 4. Allow installation from unknown sources if Android asks.
